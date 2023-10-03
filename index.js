@@ -15,6 +15,8 @@ app.engine('hbs', hbs.engine({
 
 //setup static public directory
 app.use(express.static('public'));
+//parse requests of content-type -application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true}));
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:true}));
