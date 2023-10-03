@@ -35,6 +35,11 @@ const con = mysql.createConnection({
 con.connect(err => {
     if (err) throw err;
     console.log("Connected to joga_mysql database!");
+    let sqlQuery = 'SELECT name,author_id FROM article'
+    con.query(sqlQuery, (err, result) => {
+        if (err) throw err
+        console.log(result)
+    })
 });
 
 //show all articles - index page
@@ -59,6 +64,26 @@ app.get('/article/:slug', (req, res) => {
         })
     })
 });
+
+app.get('/author/:author_id', (req, res) => {
+    let get_author = `SELECT name FROM author WHERE id = ${req.params.author_id}`
+    let query = `SELECT article.id as 'id', article.name as 'name', article.slug as 'slug', article.image as 'image', article.body as 'body', article.published as 'published' FROM article INNER JOIN author ON article.author_id = author.id WHERE author_id = ${req.params.author_id};`
+    let author = ''
+    con.query(get_author, (err, result) => {
+        if (err) throw err
+        if (result.length > 0) {
+            author = result[0].name
+        }
+    })
+    con.query(query, (err, result) => {
+        if (err) throw err
+        res.render('author', {
+            articles: result,
+            author: author
+        })
+    })
+})
+
 
 app.listen(3000, () => {
     console.log('web server is started')
