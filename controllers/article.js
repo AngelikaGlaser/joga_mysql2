@@ -1,4 +1,4 @@
-const Article = require("../models/article.models")
+const Article = require("../models/article.model")
 
 // show all articles (index)
 const getAllArticles = (req, res) => {
